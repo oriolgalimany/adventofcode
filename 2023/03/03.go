@@ -14,15 +14,6 @@ func check(e error) {
 	}
 }
 
-func number(c string) (int, bool) {
-	isNumber := false
-	value, err := strconv.Atoi(c)
-	if err == nil {
-		isNumber = true
-	}
-	return value, isNumber
-}
-
 type Digit struct {
 	number    string
 	positions [][]int
