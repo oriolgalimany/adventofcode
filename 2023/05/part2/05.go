@@ -6,6 +6,7 @@ import (
 	"math"
 	"os"
 	"regexp"
+	"runtime"
 	"strconv"
 )
 
@@ -13,7 +14,7 @@ var almanac [][][]int64
 var seeds []int64
 
 func load() {
-	file, _ := os.Open("input")
+	file, _ := os.Open("../input")
 	defer file.Close()
 
 	var mapa [][]int64
@@ -41,6 +42,18 @@ func load() {
 	almanac = append(almanac, mapa)
 }
 
+func getSeeds() []int64 {
+	var seeds []int64
+	for i := 0; i < len(almanac[0][0]); i = i + 2 {
+		for j := int64(0); j < almanac[0][0][i+1]; j++ {
+			seed := almanac[0][0][i] + j
+			seeds = append(seeds, seed)
+		}
+		runtime.GC() // brute force :3
+	}
+	return seeds
+}
+
 func convert(mapId int, value int64) int64 {
 	var mapped int64 = value
 	for _, a := range almanac[mapId] {
@@ -60,20 +73,24 @@ func convert(mapId int, value int64) int64 {
 func main() {
 	load()
 
-	seeds = almanac[0][0]
 	var location = int64(math.MaxInt64)
-	for _, seed := range seeds {
-		soil := convert(1, seed)
-		fert := convert(2, soil)
-		water := convert(3, fert)
-		light := convert(4, water)
-		temp := convert(5, light)
-		hum := convert(6, temp)
-		loc := convert(7, hum)
+	seeds := almanac[0][0]
+	for i := 0; i < len(seeds); i = i + 2 {
+		for j := int64(0); j < seeds[i+1]; j++ {
+			soil := convert(1, seeds[i]+j)
+			fert := convert(2, soil)
+			water := convert(3, fert)
+			light := convert(4, water)
+			temp := convert(5, light)
+			hum := convert(6, temp)
+			loc := convert(7, hum)
 
-		if location > loc {
-			location = loc
+			if location > loc {
+				location = loc
+			}
+
 		}
 	}
+
 	fmt.Println(location)
 }
