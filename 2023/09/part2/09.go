@@ -18,8 +18,7 @@ var historyset [][]int
 var total = 0
 
 func load() {
-	// file, _ := os.Open("input")
-	file, _ := os.Open("test")
+	file, _ := os.Open("../input")
 	defer file.Close()
 
 	re := regexp.MustCompile("(-)*\\d+")
@@ -51,6 +50,7 @@ func calc(history []int, process *[][]int) {
 		}
 	}
 	if allZeroes(array) {
+
 		*process = append(*process, array)
 		return
 	}
@@ -62,13 +62,18 @@ func predict(process_ptr *[][]int) {
 	prediction := 0
 	process := *process_ptr
 	for j := len(process) - 1; j >= 0; j-- {
+		var array []int
 		if j == len(process)-1 {
-			prediction = process[j][len(process[j])-1]
-			process[j] = append(process[j], prediction)
+			prediction = process[j][0]
 		} else {
-			prediction = process[j][len(process[j])-1] + process[j+1][len(process[j+1])-1]
-			process[j] = append(process[j], prediction)
+			prediction = process[j][0] - process[j+1][0]
 		}
+		array = append(array, prediction)
+		for _, p := range process[j] {
+			array = append(array, p)
+		}
+		process[j] = array
+
 	}
 	total += prediction
 }
