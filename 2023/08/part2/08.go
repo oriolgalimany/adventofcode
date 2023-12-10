@@ -16,7 +16,7 @@ type Node struct {
 var network map[string]Node
 var instructions string
 
-var steps []string
+var steps int64
 var n_steps []int64
 
 var current_nodes []string
@@ -78,17 +78,19 @@ func LCM2(a int64, b int64) int64 {
 }
 
 func run() {
+
 	for i := 0; i < len(current_nodes); i++ {
 		for j := 0; j < len(instructions); j++ {
 			step := string(instructions[j])
-			steps = append(steps, step)
+			steps++
 			if step == "L" {
 				current_nodes[i] = network[current_nodes[i]].left
 			} else if step == "R" {
 				current_nodes[i] = network[current_nodes[i]].right
 			}
 			if _, exist := goals[current_nodes[i]]; exist {
-				n_steps = append(n_steps, int64(len(steps)))
+				n_steps = append(n_steps, steps)
+				steps = 0
 				break
 			}
 			if j == len(instructions)-1 {
