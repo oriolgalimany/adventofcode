@@ -78,7 +78,6 @@ func LCM2(a int64, b int64) int64 {
 }
 
 func run() {
-
 	for i := 0; i < len(current_nodes); i++ {
 		for j := 0; j < len(instructions); j++ {
 			step := string(instructions[j])
